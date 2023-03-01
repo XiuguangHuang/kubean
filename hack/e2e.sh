@@ -66,7 +66,7 @@ if [ "${E2E_TYPE}" == "KUBEAN-COMPATIBILITY" ]; then
         util::clean_online_kind_cluster
         KIND_VERSION="release-ci.daocloud.io/kpanda/kindest-node:"${k8s}
         ./hack/local-up-kindcluster.sh "${TARGET_VERSION}" "${IMAGE_VERSION}" "${HELM_REPO}" "${IMG_REPO}" "${KIND_VERSION}" "${CLUSTER_PREFIX}"-host
-        kubean_compatibility_e2e
+        ./hack/kubean_compatibility_e2e.sh
     done
 fi
 
