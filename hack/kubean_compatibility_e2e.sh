@@ -29,7 +29,6 @@ function func_prepare_config_yaml_kubean_compatibility() {
 
 }
 
-function kubean_os_compatibility_e2e(){
     ARCH="amd64"
     OS_NAME="REDHAT8"
     source_yaml_path="${REPO_ROOT}/test/common"
@@ -58,4 +57,3 @@ function kubean_os_compatibility_e2e(){
     SNAPSHOT_NAME="power-down"
     util::restore_vsphere_vm_snapshot ${VSPHERE_HOST} ${VSPHERE_PASSWD} ${VSPHERE_USER} "${SNAPSHOT_NAME}" "${vm_name1}"
     util::restore_vsphere_vm_snapshot ${VSPHERE_HOST} ${VSPHERE_PASSWD} ${VSPHERE_USER} "${SNAPSHOT_NAME}" "${vm_name2}"
-}
