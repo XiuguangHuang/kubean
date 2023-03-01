@@ -32,7 +32,7 @@ function func_prepare_config_yaml_kubean_compatibility() {
     ARCH="amd64"
     OS_NAME="REDHAT8"
     source_yaml_path="${REPO_ROOT}/test/common"
-    dest_yaml_path="${REPO_ROOT}"/test/kubean_calico_dualstack_e2e/e2e-install-calico-dual-stack-cluster
+    dest_yaml_path="${REPO_ROOT}"/test/kubean_deploy_e2e/e2e-install-calico-dual-stack-cluster
     util::vm_name_ip_init_online_by_os ${OS_NAME}
     echo "vm_name1: ${vm_name1}"
     echo "vm_name2: ${vm_name2}"
