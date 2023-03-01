@@ -5,7 +5,7 @@ on:
   # At 00:00 on every Sunday（Beijing Time).
   workflow_dispatch:
   schedule:
-    - cron: '0 8 * * 7'
+    - cron: '0 8 * * 0'
 
 env:
   KUKEAN_OPERATOR_IMAGE_NAME: kubean-operator
