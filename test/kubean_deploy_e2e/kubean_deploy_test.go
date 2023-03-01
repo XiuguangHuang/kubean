@@ -25,5 +25,21 @@ var _ = ginkgo.Describe("e2e test: kubean operation", func() {
 				gomega.Expect(dm.Status.ReadyReplicas).To(gomega.Equal(dm.Status.AvailableReplicas))
 			}
 		})
+		
+		ginkgo.It("Create cluster and all kube-system pods be running", func() {
+			clusterInstallYamlsPath := "e2e-install-calico-dual-stack-cluster"
+			kubeanClusterOpsName := tools.ClusterOperationName
+			kindConfig, err := clientcmd.BuildConfigFromFlags("", tools.Kubeconfig)
+			gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "failed build config")
+			tools.OperateClusterByYaml(clusterInstallYamlsPath, kubeanClusterOpsName, kindConfig)
+			testClusterName := tools.TestClusterName
+			localKubeConfigPath := "cluster1.config"
+			tools.SaveKubeConf(kindConfig, testClusterName, localKubeConfigPath)
+			cluster1Config, err := clientcmd.BuildConfigFromFlags("", localKubeConfigPath)
+			gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "Failed new cluster1Config set")
+			cluster1Client, err := kubernetes.NewForConfig(cluster1Config)
+			gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "Failed new cluster1Client")
+			tools.WaitPodSInKubeSystemBeRunning(cluster1Client, 1800)
+		})
 	})
 })
