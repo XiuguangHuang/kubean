@@ -49,6 +49,7 @@ rm -f ~/.ssh/known_hosts
 CLUSTER_OPERATION_NAME1="cluster1-install-"`date "+%H-%M-%S"`
 echo "CLUSTER_OPERATION_NAME1: $CLUSTER_OPERATION_NAME1"
 func_prepare_config_yaml_kubean_compatibility "${source_yaml_path}" "${dest_yaml_path}"
+sed -i "s/e2e-cluster1-install/${CLUSTER_OPERATION_NAME1}/"  ${dest_yaml_path}/kubeanClusterOps.yml
 # Run cluster function e2e
 ginkgo -v -timeout=10h -race --fail-fast ./test/kubean_k8s_compatibility_e2e/  -- --kubeconfig="${KUBECONFIG_FILE}" \
                   --clusterOperationName="${CLUSTER_OPERATION_NAME1}"  --vmipaddr="${vm_ip_addr1}" --vmipaddr2="${vm_ip_addr2}" \
