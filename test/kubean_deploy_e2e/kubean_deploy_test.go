@@ -2,12 +2,14 @@ package kubean_deploy_e2e
 
 import (
 	"context"
+
 	"github.com/kubean-io/kubean/test/tools"
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/klog/v2"
 )
 
 var _ = ginkgo.Describe("e2e test: kubean operation", func() {
@@ -23,6 +25,5 @@ var _ = ginkgo.Describe("e2e test: kubean operation", func() {
 			for _, dm := range deploymentList.Items {
 				gomega.Expect(dm.Status.ReadyReplicas).To(gomega.Equal(dm.Status.AvailableReplicas))
 			}
-		})
-	})
+		})		
 })
