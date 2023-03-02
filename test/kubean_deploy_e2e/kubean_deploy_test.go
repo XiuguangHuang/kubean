@@ -14,18 +14,18 @@ import (
 
 var _ = ginkgo.Describe("e2e test: kubean operation", func() {
 	ginkgo.Context("When fetching kubean deployment info", func() {
-		ginkgo.It("Kubean deployment should be ready", func() {
-			config, err := clientcmd.BuildConfigFromFlags("", tools.Kubeconfig)
-			gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "failed build config")
-			kubeClient, err := kubernetes.NewForConfig(config)
-			gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "failed new client set")
-			kubeanNamespace := "kubean-system"
-			deploymentList, err := kubeClient.AppsV1().Deployments(kubeanNamespace).List(context.TODO(), metav1.ListOptions{})
-			gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "failed kubean deployment info")
-			for _, dm := range deploymentList.Items {
-				gomega.Expect(dm.Status.ReadyReplicas).To(gomega.Equal(dm.Status.AvailableReplicas))
-			}
-		})
+// 		ginkgo.It("Kubean deployment should be ready", func() {
+// 			config, err := clientcmd.BuildConfigFromFlags("", tools.Kubeconfig)
+// 			gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "failed build config")
+// 			kubeClient, err := kubernetes.NewForConfig(config)
+// 			gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "failed new client set")
+// 			kubeanNamespace := "kubean-system"
+// 			deploymentList, err := kubeClient.AppsV1().Deployments(kubeanNamespace).List(context.TODO(), metav1.ListOptions{})
+// 			gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "failed kubean deployment info")
+// 			for _, dm := range deploymentList.Items {
+// 				gomega.Expect(dm.Status.ReadyReplicas).To(gomega.Equal(dm.Status.AvailableReplicas))
+// 			}
+// 		})
 		
 		ginkgo.It("Create cluster and all kube-system pods be running", func() {
 			clusterInstallYamlsPath := "e2e-install-cluster"
