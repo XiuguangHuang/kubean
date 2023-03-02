@@ -27,8 +27,10 @@ var _ = ginkgo.Describe("e2e test: kubean operation", func() {
 		})
 		
 		ginkgo.It("Create cluster and all kube-system pods be running", func() {
-			clusterInstallYamlsPath := "e2e-install-calico-dual-stack-cluster"
+			clusterInstallYamlsPath := "e2e-install-cluster"
+			klog.Info("*************the cluster install yaml path is **************", clusterInstallYamlsPath)
 			kubeanClusterOpsName := tools.ClusterOperationName
+			klog.Info("*************the cluster cluster ops name is **************", kubeanClusterOpsName)
 			kindConfig, err := clientcmd.BuildConfigFromFlags("", tools.Kubeconfig)
 			gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "failed build config")
 			tools.OperateClusterByYaml(clusterInstallYamlsPath, kubeanClusterOpsName, kindConfig)
