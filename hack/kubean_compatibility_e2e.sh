@@ -51,9 +51,9 @@ function func_prepare_config_yaml_kubean_compatibility() {
     echo "CLUSTER_OPERATION_NAME1: $CLUSTER_OPERATION_NAME1"
     func_prepare_config_yaml_kubean_compatibility $source_yaml_path $dest_yaml_path
     # Run cluster function e2e
-    #ginkgo -v -timeout=10h -race --focus="Create cluster and all kube-system pods be running"  --fail-fast ./test/kubean_deploy_e2e/  -- --kubeconfig="${KUBECONFIG_FILE}" \
-    #                 --clusterOperationName="${CLUSTER_OPERATION_NAME1}"  --vmipaddr="${vm_ip_addr1}" --vmipaddr2="${vm_ip_addr2}" \
-    #                 --isOffline="${OFFLINE_FLAG}" --arch=${ARCH}  --vmPassword="${AMD_ROOT_PASSWORD}"
+    ginkgo -v -timeout=10h -race --focus="Create cluster and all kube-system pods be running"  --fail-fast ./test/kubean_deploy_e2e/  -- --kubeconfig="${KUBECONFIG_FILE}" \
+                     --clusterOperationName="${CLUSTER_OPERATION_NAME1}"  --vmipaddr="${vm_ip_addr1}" --vmipaddr2="${vm_ip_addr2}" \
+                     --isOffline="${OFFLINE_FLAG}" --arch=${ARCH}  --vmPassword="${AMD_ROOT_PASSWORD}"
     SNAPSHOT_NAME="power-down"
     util::restore_vsphere_vm_snapshot ${VSPHERE_HOST} ${VSPHERE_PASSWD} ${VSPHERE_USER} "${SNAPSHOT_NAME}" "${vm_name1}"
     util::restore_vsphere_vm_snapshot ${VSPHERE_HOST} ${VSPHERE_PASSWD} ${VSPHERE_USER} "${SNAPSHOT_NAME}" "${vm_name2}"
