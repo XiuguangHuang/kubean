@@ -2,7 +2,6 @@ package kubean_deploy_e2e
 
 import (
 	"context"
-
 	"github.com/kubean-io/kubean/test/tools"
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
