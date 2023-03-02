@@ -69,32 +69,34 @@ if [ "${E2E_TYPE}" == "KUBEAN-COMPATIBILITY" ]; then
         ./hack/local-up-kindcluster.sh "${TARGET_VERSION}" "${IMAGE_VERSION}" "${HELM_REPO}" "${IMG_REPO}" "${KIND_VERSION}" "${CLUSTER_PREFIX}"-host
         ./hack/kubean_compatibility_e2e.sh
     done
-fi
 
-util::clean_online_kind_cluster
-KIND_VERSION="release-ci.daocloud.io/kpanda/kindest-node:v1.25.3"
-./hack/local-up-kindcluster.sh "${TARGET_VERSION}" "${IMAGE_VERSION}" "${HELM_REPO}" "${IMG_REPO}" "${KIND_VERSION}" "${CLUSTER_PREFIX}"-host
+else
+    util::clean_online_kind_cluster
+    KIND_VERSION="release-ci.daocloud.io/kpanda/kindest-node:v1.25.3"
+    ./hack/local-up-kindcluster.sh "${TARGET_VERSION}" "${IMAGE_VERSION}" "${HELM_REPO}" "${IMG_REPO}" "${KIND_VERSION}" "${CLUSTER_PREFIX}"-host
 
-if [ "${E2E_TYPE}" == "PR" ]; then
-    echo "RUN PR E2E......."
-    ./hack/run-e2e.sh
-    # Judge whether to change the nightlye2e case
-    if [[ -n $DIFF_NIGHTLYE2E ]] ; then
+    if [ "${E2E_TYPE}" == "PR" ]; then
+        echo "RUN PR E2E......."
+        ./hack/run-e2e.sh
+        # Judge whether to change the nightlye2e case
+        if [[ -n $DIFF_NIGHTLYE2E ]] ; then
+            echo "RUN NIGHTLY E2E......."
+            ./hack/run-sonobouy-e2e.sh
+        fi
+        # Judge whether to change the compatibility case
+        if [[ -n $DIFF_COMPATIBILE ]] ; then
+            ## pr_ci debug stage, momentarily disable compatibility e2e
+            echo "compatibility e2e..."
+            #./hack/run-os-compatibility-e2e.sh "${CLUSTER_PREFIX}"-host $SPRAY_JOB_VERSION
+        fi
+    elif [ "${E2E_TYPE}" == "NIGHTLY" ]; then
         echo "RUN NIGHTLY E2E......."
         ./hack/run-sonobouy-e2e.sh
+    else
+        echo "RUN COMPATIBILITY E2E......."
+        ./hack/run-os-compatibility-e2e.sh
     fi
-    # Judge whether to change the compatibility case
-    if [[ -n $DIFF_COMPATIBILE ]] ; then
-        ## pr_ci debug stage, momentarily disable compatibility e2e
-        echo "compatibility e2e..."
-        #./hack/run-os-compatibility-e2e.sh "${CLUSTER_PREFIX}"-host $SPRAY_JOB_VERSION
-    fi
-elif [ "${E2E_TYPE}" == "NIGHTLY" ]; then
-    echo "RUN NIGHTLY E2E......."
-    ./hack/run-sonobouy-e2e.sh
-else
-    echo "RUN COMPATIBILITY E2E......."
-    ./hack/run-os-compatibility-e2e.sh
+
 fi
 
 util::clean_online_kind_cluster
