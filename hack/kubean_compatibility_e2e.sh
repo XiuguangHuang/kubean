@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-### this script is shared by offline os compatibility and online compatibility
-### only cover redhat8 and redhat7
+### this script is about k8s version compatibility of kubean
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -43,13 +42,13 @@ util::wait_ip_reachable "${vm_ip_addr1}" 10
 util::wait_ip_reachable "${vm_ip_addr2}" 10
 ping -c 5 "${vm_ip_addr1}"
 ping -c 5 "${vm_ip_addr2}"
-rm -f ~/.ssh/known_hosts
 
 # prepare kubean install job yml using containerd
 CLUSTER_OPERATION_NAME1="cluster1-install-"`date "+%H-%M-%S"`
 echo "CLUSTER_OPERATION_NAME1: $CLUSTER_OPERATION_NAME1"
 func_prepare_config_yaml_kubean_compatibility "${source_yaml_path}" "${dest_yaml_path}"
-sed -i "s/e2e-cluster1-install/${CLUSTER_OPERATION_NAME1}/"  ${dest_yaml_path}/kubeanClusterOps.yml
+sed -i "s/e2e-cluster1-install/${CLUSTER_OPERATION_NAME1}/" "${dest_yaml_path}"/kubeanClusterOps.yml
+
 # Run cluster function e2e
 ginkgo -v -timeout=10h -race --fail-fast ./test/kubean_k8s_compatibility_e2e/  -- --kubeconfig="${KUBECONFIG_FILE}" \
                   --clusterOperationName="${CLUSTER_OPERATION_NAME1}"  --vmipaddr="${vm_ip_addr1}" --vmipaddr2="${vm_ip_addr2}" \
