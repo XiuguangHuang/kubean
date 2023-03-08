@@ -154,6 +154,13 @@ sed -i "s/e2e-cluster1-install/${CLUSTER_OPERATION_NAME3}/"  "${dest_config_path
 sed -i "s/cluster.yml/upgrade-cluster.yml/" "${dest_config_path}"/kubeanClusterOps.yml
 sed -i "s/v1.24.7/v1.25.5/"  "${dest_config_path}"/vars-conf-cm.yml
 
+##install kubean with v1.25.3 k8s version
+#dest_config_path="${REPO_ROOT}"
+#func_prepare_config_yaml "${source_config_path}"  "${dest_config_path}"
+#CLUSTER_OPERATION_NAME4="cluster1-1-25"
+#sed -i "s/e2e-cluster1-install/${CLUSTER_OPERATION_NAME4}/"  "${dest_config_path}"/kubeanClusterOps.yml
+#sed -i "s/v1.24.7/v1.25.3/"  "${dest_config_path}"/vars-conf-cm.yml
+
 ginkgo -v -race -timeout=6h --fail-fast ./test/kubean_sonobouy_nightlye2e/  -- --kubeconfig="${KUBECONFIG_FILE}" \
           --clusterOperationName="${CLUSTER_OPERATION_NAME1}"  --vmipaddr="${vm_ip_addr1}" --vmipaddr2="${vm_ip_addr2}" \
           --isOffline="${ISOFFLINE}" --arch=${ARCH}  --vmPassword="${AMD_ROOT_PASSWORD}"

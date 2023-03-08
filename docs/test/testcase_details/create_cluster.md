@@ -64,6 +64,14 @@
     5. check k8s version by cmd: kubectl version  --short, the "Server Version" should be: v1.24.x
     6. check cluster node version, the version should be v1.24.x
 
+### Support k8s: 1.25
+    1. prepare the config file and set k8s version: 1.25.x
+    2. change cluster topology config: 1 master + 0 worker
+    3. start create cluster
+    4. after creation, check the job-related pod status is "Succeeded", and check cluster status by sonobuoy
+    5. check k8s version by cmd: kubectl version  --short, the "Server Version" should be: v1.25.x
+    6. check cluster node version, the version should be v1.25.x
+
 ### Support CRI: docker
     1. prepare the config file and set CRI: ContainerD
     2. set cluster topology to：1 master + 0 worker

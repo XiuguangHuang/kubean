@@ -257,5 +257,24 @@ var _ = ginkgo.Describe("e2e test cluster 1 master + 1 worker sonobouy check", f
 				gomega.Expect(node.Status.NodeInfo.KubeProxyVersion).To(gomega.Equal(tools.UpgradeK8Version_Z))
 			}
 		})
+		//
+		//ginkgo.It("Create cluster with v1.25.3 k8s version", func() {
+		//	clusterInstallYamlsPath := "e2e-install-1-25"
+		//	kubeanClusterOpsName := "cluster1-1-25"
+		//	kindConfig, err := clientcmd.BuildConfigFromFlags("", tools.Kubeconfig)
+		//	gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "failed build config")
+		//	tools.OperateClusterByYaml(clusterInstallYamlsPath, kubeanClusterOpsName, kindConfig)
+		//	tools.SaveKubeConf(kindConfig, testClusterName, localKubeConfigPath)
+		//	cluster1Config, err := clientcmd.BuildConfigFromFlags("", localKubeConfigPath)
+		//	gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "Failed new cluster1Config set")
+		//	cluster1Client, err := kubernetes.NewForConfig(cluster1Config)
+		//	gomega.ExpectWithOffset(2, err).NotTo(gomega.HaveOccurred(), "Failed new cluster1Client")
+		//	// Wait all pods in kube-system to be Running
+		//	tools.WaitPodSInKubeSystemBeRunning(cluster1Client, 1800)
+		//	kubectlCmd := tools.RemoteSSHCmdArrayByPasswd(password, []string{masterSSH, "kubectl", "version", "--short"})
+		//	kubectlOut, _ := tools.NewDoCmd("sshpass", kubectlCmd...)
+		//	klog.Info(kubectlOut.String())
+		//	gomega.Expect(kubectlOut.String()).Should(gomega.ContainSubstring("v1.25.3"))
+		//})
 	})
 })
