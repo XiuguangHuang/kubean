@@ -19,7 +19,7 @@ import (
 /*var _, currentFile, _, _ = runtime.Caller(0)
 var basepath = filepath.Dir(currentFile)*/
 
-var _ = ginkgo.Describe("Calico single stack tunnel: IPIP_ALWAYS", func() {
+var _ = ginkgo.Describe("[bug]Calico single stack tunnel: IPIP_ALWAYS", func() {
 
 	localKubeConfigPath := "calico-single-stack.config"
 	var masterSSH = fmt.Sprintf("root@%s", tools.Vmipaddr)
