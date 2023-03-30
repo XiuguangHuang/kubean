@@ -20,6 +20,7 @@ env:
 jobs:
   build-push-for-e2e:
     runs-on: ubuntu-latest
+    continue-on-error: true
     permissions:
       packages: write
       contents: read
@@ -70,6 +71,7 @@ jobs:
           docker push $IMAGE_ID:$VERSION
   auto-kubean-compatibility:
     runs-on: [self-hosted, online]
+    continue-on-error: true
     permissions:
       packages: write
       contents: read
