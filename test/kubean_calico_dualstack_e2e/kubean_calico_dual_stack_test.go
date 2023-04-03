@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-var _ = ginkgo.Describe("e2e add worker node operation", func() {
+var _ = ginkgo.Describe("create clusters with calico dual stack", func() {
 	ginkgo.Context("precondition: deploy one node cluster using private key file", func() {
 		var masterSSH = fmt.Sprintf("root@%s", tools.Vmipaddr)
 		var workerSSH = fmt.Sprintf("root@%s", tools.Vmipaddr2)
@@ -22,6 +22,14 @@ var _ = ginkgo.Describe("e2e add worker node operation", func() {
 		var pod1Name = "nginx1"
 		var pod2Name = "nginx2"
 		var password = tools.VmPassword
+		//check subscription
+		subscriptionCmd := tools.RemoteSSHCmdArrayByPasswd(password, []string{masterSSH, "subscription-manager", "attach", "--auto"})
+		subscriptionCmdOut, _ := tools.NewDoCmd("sshpass", subscriptionCmd...)
+		fmt.Println("check subscription of node1: ", subscriptionCmdOut.String())
+		subscriptionCmd1 := tools.RemoteSSHCmdArrayByPasswd(password, []string{workerSSH, "subscription-manager", "attach", "--auto"})
+		subscriptionCmdOut1, _ := tools.NewDoCmd("sshpass", subscriptionCmd1...)
+		fmt.Println("check subscription of node2: ", subscriptionCmdOut1.String())
+
 		//kubeanNamespace := tools.KubeanNamespace
 		testClusterName := tools.TestClusterName
 		nginxImage := "nginx:alpine"

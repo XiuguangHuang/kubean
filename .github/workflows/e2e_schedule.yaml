@@ -42,36 +42,8 @@ jobs:
         # This is where you will update the PAT to GITHUB_TOKEN
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
 
-      - name: kubean-operator Build image
-        run: docker build . --file ./build/images/$KUKEAN_OPERATOR_IMAGE_NAME/Dockerfile --tag $KUKEAN_OPERATOR_IMAGE_NAME
 
-      - name: kubean-operator Push image
-        run: |
-          IMAGE_ID=ghcr.io/${{ env.REPO }}/$KUKEAN_OPERATOR_IMAGE_NAME
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Strip git ref prefix from version
-          VERSION="$(git describe --tags --abbrev=8 --dirty)-e2e"
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $KUKEAN_OPERATOR_IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
-      - name: spray-job Build image
-        run: docker build . --file ./build/images/$SPRAY_JOB_IMAGE_NAME/Dockerfile --tag $SPRAY_JOB_IMAGE_NAME  --build-arg SPRAY_TAG=$KUBESPRAY_TAG
-
-      - name: spray-job Push image
-        run: |
-          IMAGE_ID=ghcr.io/${{ env.REPO }}/$SPRAY_JOB_IMAGE_NAME
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Strip git ref prefix from version
-          VERSION="$(git describe --tags --abbrev=8 --dirty)-e2e"
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $SPRAY_JOB_IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
-
-  schedule_sonobouy_e2e:
+  calico-single-stack-centos7:
     needs: build-push-for-e2e
     runs-on: [self-hosted, online]
     permissions:
@@ -86,15 +58,245 @@ jobs:
         with:
           go-version: 1.18.2
 
-      - name: e2e_schedule_sonobuoy
+      - name: calico-single-stack-centos7
         run: |
-          CONTAINER_TAG="$(git describe --tags --abbrev=8 --dirty)-e2e"
-          HELM_CHART_VERSION=`echo ${CONTAINER_TAG}|awk -F "-" '{print $1 }'`
-          TAG_SECOND_PART=`echo ${CONTAINER_TAG}|awk  -F "-" '{print $2 }'`
-          if [[ ${TAG_SECOND_PART} =~ rc[0-9]+ ]];then 
-            HELM_CHART_VERSION=`echo ${CONTAINER_TAG}|awk -F "-" '{print $1"-"$2 }'`
-          fi
-          echo ${{ runner.name }}
-          echo "${HELM_CHART_VERSION}" 
-          echo "${CONTAINER_TAG}"
-          bash hack/e2e.sh "${HELM_CHART_VERSION}" "${CONTAINER_TAG}" ${{ runner.name }} "${VSPHERE_USER}" "${VSPHERE_PASSWD}" "${AMD_ROOT_PASSWORD}" "${KYLIN_VM_PASSWORD}" "NIGHTLY"
+          echo "calico-single-stack-centos7"
+#          CONTAINER_TAG="$(git describe --tags --abbrev=8 --dirty)-e2e"
+#          HELM_CHART_VERSION=`echo ${CONTAINER_TAG}|awk -F "-" '{print $1 }'`
+#          TAG_SECOND_PART=`echo ${CONTAINER_TAG}|awk  -F "-" '{print $2 }'`
+#          if [[ ${TAG_SECOND_PART} =~ rc[0-9]+ ]];then
+#            HELM_CHART_VERSION=`echo ${CONTAINER_TAG}|awk -F "-" '{print $1"-"$2 }'`
+#          fi
+#          echo ${{ runner.name }}
+#          echo "${HELM_CHART_VERSION}"
+#          echo "${CONTAINER_TAG}"
+#          bash hack/e2e.sh "${HELM_CHART_VERSION}" "${CONTAINER_TAG}" ${{ runner.name }} "${VSPHERE_USER}" "${VSPHERE_PASSWD}" "${AMD_ROOT_PASSWORD}" "${KYLIN_VM_PASSWORD}" "NIGHTLY"
+
+  add-remove-worker-centos7:
+    needs: build-push-for-e2e
+    runs-on: [self-hosted, online]
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: add-remove-worker-centos7
+        run: |
+          echo "add-remove-worker-centos7"
+#          CONTAINER_TAG="$(git describe --tags --abbrev=8 --dirty)-e2e"
+#          HELM_CHART_VERSION=`echo ${CONTAINER_TAG}|awk -F "-" '{print $1 }'`
+#          TAG_SECOND_PART=`echo ${CONTAINER_TAG}|awk  -F "-" '{print $2 }'`
+#          if [[ ${TAG_SECOND_PART} =~ rc[0-9]+ ]];then
+#            HELM_CHART_VERSION=`echo ${CONTAINER_TAG}|awk -F "-" '{print $1"-"$2 }'`
+#          fi
+#          echo ${{ runner.name }}
+#          echo "${HELM_CHART_VERSION}"
+#          echo "${CONTAINER_TAG}"
+#          bash hack/e2e.sh "${HELM_CHART_VERSION}" "${CONTAINER_TAG}" ${{ runner.name }} "${VSPHERE_USER}" "${VSPHERE_PASSWD}" "${AMD_ROOT_PASSWORD}" "${KYLIN_VM_PASSWORD}" "NETWORK"
+
+  update-k8s-version-centos7:
+    needs: build-push-for-e2e
+    runs-on: [self-hosted, online]
+    continue-on-error: true
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: update-k8s-version-centos7
+        run: |
+          echo "update-k8s-version-centos7"
+
+  os-compatibility-centos7:
+    needs: build-push-for-e2e
+    runs-on: [self-hosted, online]
+    continue-on-error: true
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: os-compatibility-centos7
+        run: |
+          echo "os-compatibility-centos7"
+
+  os-compatibility-redhat7:
+    needs: build-push-for-e2e
+    runs-on: [self-hosted, online]
+    continue-on-error: true
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: os-compatibility-redhat7
+        run: |
+          echo "os-compatibility-redhat7"
+
+  os-compatibility-redhat8:
+    needs: build-push-for-e2e
+    runs-on: [self-hosted, online]
+    continue-on-error: true
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: os-compatibility-redhat8
+        run: |
+          echo "os-compatibility-redhat8"
+
+  os-compatibility-kylin:
+    needs: build-push-for-e2e
+    runs-on: [self-hosted, online]
+    continue-on-error: true
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: os-compatibility-kylin
+        run: |
+          echo "os-compatibility-kylin"
+
+  kubean-function-e2e-centos7:
+    needs: build-push-for-e2e
+    runs-on: [self-hosted, online]
+    continue-on-error: true
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: kubean-function-e2e-centos7
+        run: |
+          echo "kubean-function-e2e-centos7"
+
+  reset-cluster-e2e-centos7:
+    needs: build-push-for-e2e
+    runs-on: [self-hosted, online]
+    continue-on-error: true
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: reset-cluster-e2e-centos7
+        run: |
+          echo "reset-cluster-e2e-centos7"
+
+  install-with-docker-e2e-centos7:
+    needs: build-push-for-e2e
+    runs-on: [self-hosted, online]
+    continue-on-error: true
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: install-with-docker-e2e-centos7
+        run: |
+          echo "install-with-docker-e2e-centos7"
+
+  calico-dual-stack-e2e-redhat8:
+    needs: [calico-single-stack-centos7, add-remove-worker-centos7, reset-cluster-e2e-centos7, kubean-function-e2e-centos7, os-compatibility-kylin, os-compatibility-redhat8, os-compatibility-redhat7, os-compatibility-centos7, update-k8s-version-centos7, install-with-docker-e2e-centos7]
+    runs-on: [self-hosted, online]
+    continue-on-error: true
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: calico-dual-stack-e2e-redhat8
+        run: |
+          echo "calico-dual-stack-e2e-redhat8"
+
+  cilium-cluster-e2e-redhat8:
+    needs: [calico-single-stack-centos7, add-remove-worker-centos7, reset-cluster-e2e-centos7, kubean-function-e2e-centos7, os-compatibility-kylin, os-compatibility-redhat8, os-compatibility-redhat7, os-compatibility-centos7, update-k8s-version-centos7, install-with-docker-e2e-centos7]
+    runs-on: [self-hosted, online]
+    continue-on-error: true
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.2
+
+      - name: cilium-cluster-e2e-redhat8
+        run: |
+          echo "cilium-cluster-e2e-redhat8"

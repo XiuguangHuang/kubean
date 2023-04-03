@@ -55,6 +55,7 @@ chmod +x ./hack/run-os-compatibility-e2e.sh
 chmod +x ./hack/run-network-e2e.sh
 chmod +x ./hack/run-nightly-cluster-e2e.sh
 chmod +x ./hack/kubean_compatibility_e2e.sh
+chmod +x ./hack/run-rhel8-network-e2e.sh
 DIFF_NIGHTLYE2E=`git show -- './test/*' | grep nightlye2e || true`
 DIFF_COMPATIBILE=`git show | grep /test/kubean_os_compatibility_e2e || true`
 
@@ -92,6 +93,9 @@ else
     elif [ "${E2E_TYPE}" == "NIGHTLY" ]; then
         echo "RUN NIGHTLY E2E......."
         ./hack/run-sonobouy-e2e.sh
+    elif [ "${E2E_TYPE}" == "NETWORK" ]; then
+        echo "RUN NETWORK E2E......."
+        ./hack/run-rhel8-network-e2e.sh
     else
         echo "RUN COMPATIBILITY E2E......."
         ./hack/run-os-compatibility-e2e.sh
